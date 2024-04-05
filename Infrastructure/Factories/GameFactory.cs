@@ -66,15 +66,14 @@ namespace Codebase.Infrastructure
             foreach (EnemyMarker marker in _sceneData.EnemyMarkers)
             {
                 enemy = CreateEnemy(marker.transform.position);
+                enemy.Patrol(marker.PatrolRoute);
             }
         }
 
         public void CreateCoins()
         {
-            foreach(PickUpMarker marker in _sceneData.CoinMarkers)
-            {
+            foreach (PickUpMarker marker in _sceneData.CoinMarkers)
                 CreatePickUp(marker, _coinPrefab);
-            }
         }
     }
 }

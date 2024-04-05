@@ -8,9 +8,9 @@ namespace Codebase.Logic.Enemies
     public class EnemyMover : MonoBehaviour
     {
         [SerializeField] private NavMeshAgent _navAgent;
-        [SerializeField] private Transform[] _patrolRoute;
 
         private readonly float _distanceMargin = 0.2f;
+        private Transform[] _patrolRoute;
         private Coroutine _navigationCoroutine;
         private int _nextWaypointIndex;
 
@@ -18,15 +18,6 @@ namespace Codebase.Logic.Enemies
         {
             if (_navAgent == null)
                 throw new ArgumentNullException(nameof(_navAgent));
-
-            if (_patrolRoute.Length < 2)
-                throw new ArgumentOutOfRangeException(nameof(_patrolRoute));
-        }
-
-        private void Start()
-        {
-            _nextWaypointIndex = 0;
-            MoveToNextWaypoint();
         }
 
         private void OnDisable()
@@ -35,14 +26,21 @@ namespace Codebase.Logic.Enemies
                 StopCoroutine(_navigationCoroutine);
         }
 
+        public void Patrol(Transform[] route)
+        {
+            _patrolRoute = route;
+            _nextWaypointIndex = 0;
+            MoveToNextWaypoint();
+        }
+
         private void MoveToNextWaypoint()
         {
-            _nextWaypointIndex++;
-
-            if (_nextWaypointIndex >= _patrolRoute.Length)
-                _nextWaypointIndex = 0;
-
+            _nextWaypointIndex = (_nextWaypointIndex + 1) % _patrolRoute.Length;
             _navAgent.destination = _patrolRoute[_nextWaypointIndex].position;
+
+            if (_navigationCoroutine != null)
+                StopCoroutine(_navigationCoroutine);
+
             _navigationCoroutine = StartCoroutine(NextWaypointReachedCheckAsync());
         }
 
@@ -58,11 +56,11 @@ namespace Codebase.Logic.Enemies
 
         private bool IsWaypointReached()
         {
-            if (_navAgent.pathPending == false && _navAgent.remainingDistance < _distanceMargin)
-                return true;
+            if (_navAgent.pathPending == false 
+                && _navAgent.remainingDistance < _distanceMargin)
+                 return true;
 
             return false;
         }
     }
-
 }
