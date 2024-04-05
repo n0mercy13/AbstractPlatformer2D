@@ -1,4 +1,5 @@
-﻿using Codebase.StaticData;
+﻿using Codebase.Logic.Player;
+using Codebase.StaticData;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

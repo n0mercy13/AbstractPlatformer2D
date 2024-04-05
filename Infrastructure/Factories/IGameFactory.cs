@@ -1,4 +1,6 @@
-﻿namespace Codebase.Infrastructure
+﻿using Codebase.Logic.Player;
+
+namespace Codebase.Infrastructure
 {
     public interface IGameFactory
     {

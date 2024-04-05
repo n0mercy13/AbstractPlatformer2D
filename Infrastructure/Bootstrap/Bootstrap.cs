@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Codebase.Logic.Player;
 using VContainer.Unity;
 
 namespace Codebase.Infrastructure
