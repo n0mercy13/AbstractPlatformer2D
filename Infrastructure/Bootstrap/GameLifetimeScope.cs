@@ -1,4 +1,3 @@
-using Cinemachine;
 using Codebase.StaticData;
 using System;
 using UnityEngine;
@@ -10,15 +9,15 @@ namespace Codebase.Infrastructure
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameConfig _gameConfig;
-        [SerializeField] private CinemachineVirtualCamera _virtualCamera;
+        [SerializeField] private SceneData _sceneData;
 
         private void OnValidate()
         {
             if (_gameConfig == null)
                 throw new ArgumentNullException(nameof(_gameConfig));
 
-            if (_virtualCamera == null)
-                throw new ArgumentNullException(nameof(_virtualCamera));
+            if (_sceneData == null)
+                throw new ArgumentNullException(nameof(_sceneData));
         }
 
         protected override void Configure(IContainerBuilder builder)
@@ -28,7 +27,7 @@ namespace Codebase.Infrastructure
             builder
                 .RegisterInstance(_gameConfig.EnemyConfig);
             builder 
-                .RegisterInstance(_virtualCamera);
+                .RegisterInstance(_sceneData);
             builder
                 .RegisterComponentInNewPrefab(_gameConfig.PlayerConfig.Prefab, Lifetime.Scoped)
                 .AsSelf();
