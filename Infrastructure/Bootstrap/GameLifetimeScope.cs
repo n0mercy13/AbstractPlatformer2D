@@ -1,8 +1,8 @@
-using Codebase.StaticData;
 using System;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using Codebase.StaticData;
 
 namespace Codebase.Infrastructure
 {
@@ -22,20 +22,14 @@ namespace Codebase.Infrastructure
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder
-                .RegisterInstance(_gameConfig.PlayerConfig);
-            builder
-                .RegisterInstance(_gameConfig.EnemyConfig);
-            builder 
-                .RegisterInstance(_sceneData);
-            builder
-                .RegisterComponentInNewPrefab(_gameConfig.PlayerConfig.Prefab, Lifetime.Scoped)
-                .AsSelf();
+            RegisterStaticData(builder);
+            RegisterPrefabs(builder);
+            RegisterEntryPoint(builder);
+            RegisterServices(builder);
+        }
 
-            builder
-                .RegisterEntryPoint<Bootstrap>(Lifetime.Singleton)
-                .AsSelf();
-
+        private void RegisterServices(IContainerBuilder builder)
+        {
             builder
                 .Register<InputActions>(Lifetime.Singleton)
                 .AsSelf();
@@ -45,6 +39,35 @@ namespace Codebase.Infrastructure
             builder
                 .Register<GameFactory>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
+        }
+
+        private void RegisterEntryPoint(IContainerBuilder builder)
+        {
+            builder
+                .RegisterEntryPoint<Bootstrap>(Lifetime.Singleton)
+                .AsSelf();
+        }
+
+        private void RegisterPrefabs(IContainerBuilder builder)
+        {
+            builder
+                .RegisterComponentInNewPrefab(_gameConfig.PlayerConfig.Prefab, Lifetime.Scoped);
+            builder
+                .RegisterComponentInNewPrefab(_gameConfig.EnemyConfig.Prefab, Lifetime.Scoped);
+            builder
+                .RegisterComponentInNewPrefab(_gameConfig.PickUpsConfig.CoinPrefab, Lifetime.Scoped);
+        }
+
+        private void RegisterStaticData(IContainerBuilder builder)
+        {
+            builder
+                .RegisterInstance(_gameConfig.PlayerConfig);
+            builder
+                .RegisterInstance(_gameConfig.EnemyConfig);
+            builder
+                .RegisterInstance(_gameConfig.PickUpsConfig);
+            builder
+                .RegisterInstance(_sceneData);
         }
     }
 }

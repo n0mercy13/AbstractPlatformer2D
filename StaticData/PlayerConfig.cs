@@ -15,6 +15,5 @@ namespace Codebase.StaticData
         [field: SerializeField, Range(10.0f, 30.0f)] public float JumpVelocity { get; private set; }
         [field: SerializeField, Range(0.0f, 5.0f)] public float GravityModifier { get; private set; }
         [field: SerializeField, Header("Instantiation")] public Player Prefab { get; private set; }
-        [field: SerializeField] public Vector3 InitialPosition { get; private set; }
     }
 }

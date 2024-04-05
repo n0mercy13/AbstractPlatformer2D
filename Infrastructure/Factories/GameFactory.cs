@@ -1,4 +1,6 @@
-﻿using Codebase.Logic.Player;
+﻿using Codebase.Logic;
+using Codebase.Logic.Enemy;
+using Codebase.Logic.Player;
 using Codebase.StaticData;
 using UnityEngine;
 using VContainer;
@@ -9,20 +11,70 @@ namespace Codebase.Infrastructure
     public partial class GameFactory
     {
         private readonly IObjectResolver _container;
+        private readonly System.Random _random;
+        private readonly int _seed = 1;
+        private readonly SceneData _sceneData;
         private readonly Player _playerPrefab;
-        private readonly Vector3 _playerInitialPosition;
+        private readonly Enemy _enemyPrefab;
+        private readonly Coin _coinPrefab;
 
-        public GameFactory(IObjectResolver container, PlayerConfig playerConfig) 
-        { 
+        public GameFactory(
+            IObjectResolver container,
+            SceneData sceneData,
+            PlayerConfig playerConfig,
+            EnemyConfig enemyConfig,
+            PickUpsConfig pickUpConfig)
+        {
             _container = container;
+            _sceneData = sceneData;
             _playerPrefab = playerConfig.Prefab;
-            _playerInitialPosition = playerConfig.InitialPosition;
+            _enemyPrefab = enemyConfig.Prefab;
+            _coinPrefab = pickUpConfig.CoinPrefab;
+
+            _random = new System.Random(_seed);
         }
+
+        private Enemy CreateEnemy(Vector3 position) =>
+            _container.Instantiate(_enemyPrefab, position, Quaternion.identity, _sceneData.EnemyParent);
+
+        private void CreatePickUp<T>(PickUpMarker marker, T prefab) where T : PickUp
+        {
+            if (CanCreate(marker.SpawnChance) == false)
+                return;
+
+            _container.Instantiate<T>(
+                prefab, marker.transform.position, Quaternion.identity, _sceneData.PickUpParent);
+        }
+
+        private bool CanCreate(float chance) =>
+            chance >= _random.NextDouble();
     }
 
     public partial class GameFactory : IGameFactory
     {
-        public Player CreatePlayer() => 
-            _container.Instantiate<Player>(_playerPrefab, _playerInitialPosition, Quaternion.identity);
+        public void CreatePlayer()
+        {
+            Player player = _container.Instantiate(
+               _playerPrefab, _sceneData.PlayerMarker.transform.position, Quaternion.identity);
+            _sceneData.VirtualCamera.Follow = player.transform;
+        }
+
+        public void CreateEnemies()
+        {
+            Enemy enemy = null;
+
+            foreach (EnemyMarker marker in _sceneData.EnemyMarkers)
+            {
+                enemy = CreateEnemy(marker.transform.position);
+            }
+        }
+
+        public void CreateCoins()
+        {
+            foreach(PickUpMarker marker in _sceneData.CoinMarkers)
+            {
+                CreatePickUp(marker, _coinPrefab);
+            }
+        }
     }
 }
