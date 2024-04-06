@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using Codebase.Logic.EnemyComponents;
 using VContainer;
+using Codebase.StaticData;
 
-namespace Codebase.Logic.Enemy
+namespace Codebase.Logic.EnemyComponents
 {
     public partial class Enemy : MonoBehaviour
     {
@@ -12,9 +12,10 @@ namespace Codebase.Logic.Enemy
         private IHealth _health;
 
         [Inject]
-        private void Construct(IHealth health)
+        private void Construct(IHealth health, EnemyConfig config)
         {
             _health = health;
+            _health.Initialize(config.MaxHealth);
 
             _health.HealthChanged += OnHealthChanged;
             _health.Death += OnDeath;

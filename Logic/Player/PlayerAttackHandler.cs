@@ -1,9 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using VContainer;
 using Codebase.Infrastructure;
 using Codebase.StaticData;
 using System.Collections;
+using Codebase.Logic.EnemyComponents;
 
 namespace Codebase.Logic.PlayerComponents
 {
@@ -46,7 +46,7 @@ namespace Codebase.Logic.PlayerComponents
 
             _canAttack = false;
             ApplyDamage();
-            StartCoroutine(RechargeAttackAsync());
+            _attackRechargeCoroutine = StartCoroutine(AttackRechargeAsync());
         }
 
         private void ApplyDamage()
@@ -56,14 +56,14 @@ namespace Codebase.Logic.PlayerComponents
 
             foreach(Collider collider in _colliders)
             {
-                if(collider.TryGetComponent(out IDamageable damageable))
+                if(collider.TryGetComponent(out Enemy enemy))
                 {
-                    damageable.ApplyDamage(_damage);
+                    enemy.ApplyDamage(_damage);
                 }
             }
         }
 
-        private IEnumerator RechargeAttackAsync()
+        private IEnumerator AttackRechargeAsync()
         {
             yield return _attackDelay;
 

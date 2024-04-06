@@ -1,5 +1,5 @@
 ﻿using Codebase.Logic;
-using Codebase.Logic.Enemy;
+using Codebase.Logic.EnemyComponents;
 using Codebase.Logic.PlayerComponents;
 using Codebase.StaticData;
 using UnityEngine;

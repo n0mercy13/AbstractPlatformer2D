@@ -7,6 +7,7 @@ namespace Codebase.Logic.EnemyComponents
     {
         [SerializeField] private EnemyMover _mover;
         [SerializeField] private PlayerDetector _detector;
+        [SerializeField] private EnemyAttackHandler _attack;
 
         private Transform[] _patrolRoute;
 
@@ -17,6 +18,9 @@ namespace Codebase.Logic.EnemyComponents
 
             if(_detector == null) 
                 throw new ArgumentNullException(nameof(_detector));
+
+            if(_attack == null)
+                throw new ArgumentNullException(nameof(_attack));
         }
 
         private void OnEnable()
@@ -45,11 +49,13 @@ namespace Codebase.Logic.EnemyComponents
         private void OnPlayerDetected(Transform player)
         {
             _mover.Pursue(player);
+            _attack.AttackAsync();
         }
 
         private void OnPlayerLost()
         {
             Patrol();
+            _attack.StopAttack();
         }
     }
 }
