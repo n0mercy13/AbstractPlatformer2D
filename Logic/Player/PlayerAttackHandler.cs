@@ -3,7 +3,6 @@ using VContainer;
 using Codebase.Infrastructure;
 using Codebase.StaticData;
 using System.Collections;
-using Codebase.Logic.EnemyComponents;
 
 namespace Codebase.Logic.PlayerComponents
 {
@@ -11,10 +10,11 @@ namespace Codebase.Logic.PlayerComponents
     {
         [SerializeField] private LayerMask _layerMask;
 
+        private readonly int _simultaneousHits = 10;
         private IGameplayInput _input;
         private YieldInstruction _attackDelay;
         private Coroutine _attackRechargeCoroutine;
-        private Collider[] _colliders;
+        private Collider[] _hits;
         private float _attackRadius;
         private int _damage;
         private bool _canAttack;
@@ -24,6 +24,7 @@ namespace Codebase.Logic.PlayerComponents
         {
             _input = input;
             _attackDelay = new WaitForSeconds(config.AttackSpeed);
+            _hits = new Collider[_simultaneousHits];
             _attackRadius = config.AttackRadius;
             _damage = config.Damage;
             _canAttack = true;
@@ -51,14 +52,14 @@ namespace Codebase.Logic.PlayerComponents
 
         private void ApplyDamage()
         {
-            _colliders = Physics.OverlapSphere(
-                transform.position, _attackRadius, _layerMask);
+            int numberHits = Physics.OverlapSphereNonAlloc(
+                transform.position, _attackRadius, _hits, _layerMask);
 
-            foreach(Collider collider in _colliders)
+            for(int i = 0; i < numberHits; i++)
             {
-                if(collider.TryGetComponent(out Enemy enemy))
+                if (_hits[i].TryGetComponent(out IDamageable damageable))
                 {
-                    enemy.ApplyDamage(_damage);
+                    damageable.ApplyDamage(_damage);
                 }
             }
         }
