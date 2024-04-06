@@ -3,6 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using Codebase.StaticData;
+using Codebase.Logic;
 
 namespace Codebase.Infrastructure
 {
@@ -26,6 +27,14 @@ namespace Codebase.Infrastructure
             RegisterPrefabs(builder);
             RegisterEntryPoint(builder);
             RegisterServices(builder);
+            RegisterComponents(builder);
+        }
+
+        private static void RegisterComponents(IContainerBuilder builder)
+        {
+            builder
+                .Register<Health>(Lifetime.Transient)
+                .AsImplementedInterfaces();
         }
 
         private void RegisterServices(IContainerBuilder builder)

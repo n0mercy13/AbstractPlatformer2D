@@ -1,6 +1,6 @@
 ﻿using Codebase.Logic;
 using Codebase.Logic.Enemy;
-using Codebase.Logic.Player;
+using Codebase.Logic.PlayerComponents;
 using Codebase.StaticData;
 using UnityEngine;
 using VContainer;
@@ -66,7 +66,7 @@ namespace Codebase.Infrastructure
             foreach (EnemyMarker marker in _sceneData.EnemyMarkers)
             {
                 enemy = CreateEnemy(marker.transform.position);
-                enemy.Patrol(marker.PatrolRoute);
+                enemy.Initialize(marker.PatrolRoute);
             }
         }
 

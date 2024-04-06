@@ -1,6 +1,6 @@
 namespace Codebase.Logic
 {
-	public class Coin : PickUp
+    public class Coin : PickUp
 	{
 	} 
 }

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Codebase.StaticData;
 
-namespace Codebase.Logic.Player
+namespace Codebase.Logic.PlayerComponents
 {
     public class PlayerAnimationHandler : MonoBehaviour
     {

@@ -5,7 +5,7 @@ using VContainer;
 using Codebase.StaticData;
 using Codebase.Infrastructure;
 
-namespace Codebase.Logic.Player
+namespace Codebase.Logic.PlayerComponents
 {
     public class PlayerVerticalMover : MonoBehaviour
     {

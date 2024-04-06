@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine;
 using VContainer;
 
-namespace Codebase.Logic.Player
+namespace Codebase.Logic.PlayerComponents
 {
     public class PlayerHorizontalMover : MonoBehaviour
     {

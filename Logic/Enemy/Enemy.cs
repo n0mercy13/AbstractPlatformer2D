@@ -1,30 +1,25 @@
 ﻿using System;
 using UnityEngine;
-using Codebase.Logic.Enemies;
+using Codebase.Logic.EnemyComponents;
 
 namespace Codebase.Logic.Enemy
 {
-    public class Enemy : MonoBehaviour
+    public partial class Enemy : MonoBehaviour
     {
-        [SerializeField] private EnemyMover _mover;
-
-        private Transform[] _patrolRoute;
+        [SerializeField] private EnemyAI _ai;
 
         private void OnValidate()
         {
-            if(_mover == null)
-                throw new ArgumentNullException(nameof(_mover));
+            if(_ai == null)
+                throw new ArgumentNullException(nameof(_ai));
         }
+    }
 
-        public void Patrol(Transform[] patrolRoute = null)
+    public partial class Enemy : IInitializable<Transform[]>
+    {
+        public void Initialize(Transform[] patrolRoute)
         {
-            if (patrolRoute == null && _patrolRoute == null)
-                throw new InvalidOperationException("No valid route to patrol");
-
-            if(patrolRoute != null)
-                _patrolRoute = patrolRoute;
-
-            _mover.Patrol(_patrolRoute);
+            _ai.SetPatrolRoute(patrolRoute);
         }
     }
 }

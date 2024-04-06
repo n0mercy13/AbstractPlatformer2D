@@ -1,4 +1,4 @@
-﻿using Codebase.Logic.Player;
+﻿using Codebase.Logic.PlayerComponents;
 using UnityEngine;
 
 namespace Codebase.Infrastructure

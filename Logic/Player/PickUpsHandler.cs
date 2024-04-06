@@ -1,8 +1,7 @@
-using Codebase.Logic;
 using System;
 using UnityEngine;
 
-namespace Codebase.Logic.Player
+namespace Codebase.Logic.PlayerComponents
 {
     [RequireComponent(typeof(SphereCollider))]
     public class PickUpsHandler : MonoBehaviour
@@ -18,18 +17,29 @@ namespace Codebase.Logic.Player
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<Coin>(out Coin coin))
+            if (other.TryGetComponent(out Coin coin))
             {
                 CollectCoin(coin);
+            }
+            else if(other.TryGetComponent(out MedicalKit medicalKit))
+            {
+                CollectMedicalKit(medicalKit);
             }
         }
 
         public event Action<int> CoinCollected = delegate { };
+        public event Action<int> MedicalKitCollected = delegate { };
 
         private void CollectCoin(Coin coin)
         {
             int value = coin.Collect();
             CoinCollected.Invoke(value);
         }
-    } 
+
+        private void CollectMedicalKit(MedicalKit medicalKit)
+        {
+            int value = medicalKit.Collect();
+            MedicalKitCollected.Invoke(value);
+        }
+    }
 }
