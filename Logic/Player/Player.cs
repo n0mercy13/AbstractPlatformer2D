@@ -5,7 +5,7 @@ using VContainer;
 
 namespace Codebase.Logic.PlayerComponents
 {
-    public class Player : MonoBehaviour
+    public partial class Player : MonoBehaviour
     {
         [SerializeField] private PickUpsHandler _pickUpsHandler;
 
@@ -65,5 +65,10 @@ namespace Codebase.Logic.PlayerComponents
         {
             _health.Heal(amount);
         }
+    }
+
+    public partial class Player : IDamageable
+    {
+        public void ApplyDamage(int amount) => _health.ApplyDamage(amount);
     }
 }
