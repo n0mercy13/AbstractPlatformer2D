@@ -17,6 +17,7 @@ namespace Codebase.Infrastructure
         private readonly Player _playerPrefab;
         private readonly Enemy _enemyPrefab;
         private readonly Coin _coinPrefab;
+        private readonly MedicalKit _medicalKitPrefab;
 
         public GameFactory(
             IObjectResolver container,
@@ -30,6 +31,7 @@ namespace Codebase.Infrastructure
             _playerPrefab = playerConfig.Prefab;
             _enemyPrefab = enemyConfig.Prefab;
             _coinPrefab = pickUpConfig.CoinPrefab;
+            _medicalKitPrefab = pickUpConfig.MedicalKitPrefab;
 
             _random = new System.Random(_seed);
         }
@@ -74,6 +76,12 @@ namespace Codebase.Infrastructure
         {
             foreach (PickUpMarker marker in _sceneData.CoinMarkers)
                 CreatePickUp(marker, _coinPrefab);
+        }
+
+        public void CreateMedicalKits()
+        {
+            foreach (PickUpMarker marker in _sceneData.MedicalKitMarkers)
+                CreatePickUp(marker, _medicalKitPrefab);
         }
     }
 }

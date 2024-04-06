@@ -13,14 +13,15 @@ namespace Codebase.Infrastructure
 
         public void Start()
         {
-            InstantiateActors();
+            InstantiateWorld();
         }
 
-        private void InstantiateActors()
+        private void InstantiateWorld()
         {
             _gameFactory.CreatePlayer();
             _gameFactory.CreateEnemies();
             _gameFactory.CreateCoins();
+            _gameFactory.CreateMedicalKits();
         }
     }
 }

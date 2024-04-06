@@ -10,6 +10,7 @@ namespace Codebase.StaticData
 		[field: SerializeField, Header("Markers")] public PlayerMarker PlayerMarker { get; private set; }
 		[field: SerializeField] public EnemyMarker[] EnemyMarkers { get; private set; }
 		[field: SerializeField] public PickUpMarker[] CoinMarkers { get; private set; }
+		[field: SerializeField] public PickUpMarker[] MedicalKitMarkers { get; private set; }
         [field: SerializeField, Header("Parent")] public Transform EnemyParent { get; private set; }
         [field: SerializeField] public Transform PickUpParent { get; private set; }
 
@@ -26,6 +27,9 @@ namespace Codebase.StaticData
 
             if(CoinMarkers.Length < 1)
                 throw new ArgumentOutOfRangeException(nameof(CoinMarkers));
+            
+            if(MedicalKitMarkers.Length < 1)
+                throw new ArgumentOutOfRangeException(nameof(MedicalKitMarkers));
 
             if(EnemyParent == null)
                 throw new ArgumentNullException(nameof(EnemyParent));

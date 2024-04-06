@@ -8,6 +8,7 @@ namespace Codebase.StaticData
     public class PickUpsConfig 
     {
         [field: SerializeField] public Coin CoinPrefab { get; private set; }
+        [field: SerializeField] public MedicalKit MedicalKitPrefab { get; private set; }
     }
 
 }
