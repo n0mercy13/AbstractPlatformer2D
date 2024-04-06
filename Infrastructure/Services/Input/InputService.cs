@@ -18,6 +18,7 @@ namespace Codebase.Infrastructure
             _inputs.Gameplay.Run.performed += OnRunPerformed;
             _inputs.Gameplay.Run.canceled += OnRunCanceled;
             _inputs.Gameplay.Jump.performed += OnJumpPerformed;
+            _inputs.Gameplay.Attack.performed += OnAttackPerformed;
         }
 
         private void OnHorizontalAxisPerformed(CallbackContext context)
@@ -52,6 +53,12 @@ namespace Codebase.Infrastructure
             if (context.phase.Equals(InputActionPhase.Performed))
                 JumpPressed.Invoke();
         }
+
+        private void OnAttackPerformed(CallbackContext context)
+        {
+            if(context.phase.Equals(InputActionPhase.Performed))
+                AttackPressed.Invoke();
+        }
     }
 
     public partial class InputService : IGameplayInput
@@ -59,6 +66,7 @@ namespace Codebase.Infrastructure
         public event Action<float> HorizontalDirectionChanged = delegate { };
         public event Action<bool> IsRunPressed = delegate { };
         public event Action JumpPressed = delegate { };
+        public event Action AttackPressed = delegate { };
     }
 
     public partial class InputService : IDisposable

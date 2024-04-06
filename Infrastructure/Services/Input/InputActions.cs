@@ -55,6 +55,15 @@ namespace Codebase.Infrastructure
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""63309264-1e05-4c38-a6db-399638a99d67"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,28 @@ namespace Codebase.Infrastructure
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a87a8d72-14b6-4d9f-aaf4-ff0a82ff0810"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce85ab4c-fce7-4745-80ab-afbfae1d50ee"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -135,6 +166,7 @@ namespace Codebase.Infrastructure
             m_Gameplay_HorizontalAxis = m_Gameplay.FindAction("HorizontalAxis", throwIfNotFound: true);
             m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
             m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
+            m_Gameplay_Attack = m_Gameplay.FindAction("Attack", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -199,6 +231,7 @@ namespace Codebase.Infrastructure
         private readonly InputAction m_Gameplay_HorizontalAxis;
         private readonly InputAction m_Gameplay_Run;
         private readonly InputAction m_Gameplay_Jump;
+        private readonly InputAction m_Gameplay_Attack;
         public struct GameplayActions
         {
             private @InputActions m_Wrapper;
@@ -206,6 +239,7 @@ namespace Codebase.Infrastructure
             public InputAction @HorizontalAxis => m_Wrapper.m_Gameplay_HorizontalAxis;
             public InputAction @Run => m_Wrapper.m_Gameplay_Run;
             public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
+            public InputAction @Attack => m_Wrapper.m_Gameplay_Attack;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -224,6 +258,9 @@ namespace Codebase.Infrastructure
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -237,6 +274,9 @@ namespace Codebase.Infrastructure
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @Attack.started -= instance.OnAttack;
+                @Attack.performed -= instance.OnAttack;
+                @Attack.canceled -= instance.OnAttack;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -268,6 +308,7 @@ namespace Codebase.Infrastructure
             void OnHorizontalAxis(InputAction.CallbackContext context);
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
+            void OnAttack(InputAction.CallbackContext context);
         }
     }
 }

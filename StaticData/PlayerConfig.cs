@@ -8,7 +8,7 @@ namespace Codebase.StaticData
     public class PlayerConfig
     {
         [field: SerializeField, Range(0, 100), Header("Stats")] public int MaxHealth { get; private set; }
-        [field: SerializeField, Range(0.0f, 10.0f), Header("Attack")] public float DamagePerAttack { get; private set; }
+        [field: SerializeField, Range(0, 10), Header("Attack")] public int Damage { get; private set; }
         [field: SerializeField, Range(0.0f, 5.0f)] public float AttackSpeed { get; private set; }
         [field: SerializeField, Range(0.0f, 5.0f)] public float AttackRadius { get; private set; }
         [field: SerializeField, Range(0.0f, 10.0f), Header("Horizontal Movements")] public float WalkSpeed { get; private set; }

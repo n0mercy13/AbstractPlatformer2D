@@ -7,5 +7,6 @@ namespace Codebase.Infrastructure
         event Action<float> HorizontalDirectionChanged;
         event Action<bool> IsRunPressed;
         event Action JumpPressed;
+        event Action AttackPressed;
     }
 }
