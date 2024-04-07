@@ -1,4 +1,6 @@
-﻿namespace Codebase.Infrastructure
+﻿using Codebase.UI;
+
+namespace Codebase.Infrastructure
 {
     public interface IGameFactory
     {
@@ -6,5 +8,6 @@
         void CreateEnemies();
         void CreateCoins();
         void CreateMedicalKits();
+        UI_Window[] CreateUI();
     }
 }

@@ -10,6 +10,7 @@ namespace Codebase.StaticData
         [field: SerializeField] public EnemyConfig EnemyConfig { get; private set; }
         [field: SerializeField] public PickUpsConfig PickUpsConfig { get; private set; }
         [field: SerializeField] public AudioConfig AudioConfig { get; private set; }
+        [field: SerializeField] public UIConfig UIConfig { get; private set; }
 
         private void OnValidate()
         {
@@ -24,6 +25,9 @@ namespace Codebase.StaticData
             
             if(AudioConfig == null)
                 throw new ArgumentNullException(nameof(AudioConfig));
+
+            if (UIConfig == null)
+                throw new ArgumentNullException(nameof(UIConfig));
         }
     }
 }

@@ -27,7 +27,15 @@ namespace Codebase.Infrastructure
             RegisterPrefabs(builder);
             RegisterEntryPoint(builder);
             RegisterServices(builder);
+            RegisterManagers(builder);
             RegisterComponents(builder);
+        }
+
+        private void RegisterManagers(IContainerBuilder builder)
+        {
+            builder
+                .Register<UIManager>(Lifetime.Singleton)
+                .AsSelf();
         }
 
         private static void RegisterComponents(IContainerBuilder builder)
@@ -80,6 +88,8 @@ namespace Codebase.Infrastructure
                 .RegisterInstance(_gameConfig.PickUpsConfig);
             builder
                 .RegisterInstance(_gameConfig.AudioConfig);
+            builder
+                .RegisterInstance(_gameConfig.UIConfig);
             builder
                 .RegisterInstance(_sceneData);
         }

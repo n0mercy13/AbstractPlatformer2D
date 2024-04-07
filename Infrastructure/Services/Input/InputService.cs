@@ -19,6 +19,27 @@ namespace Codebase.Infrastructure
             _inputs.Gameplay.Run.canceled += OnRunCanceled;
             _inputs.Gameplay.Jump.performed += OnJumpPerformed;
             _inputs.Gameplay.Attack.performed += OnAttackPerformed;
+            _inputs.UI.OpenSettings.performed += OnOpenSettingsPerformed;
+            _inputs.UI.Cancel.performed += OnCancelPerformed;
+            _inputs.UI.Submit.performed += OnSubmitPerformed;
+        }
+
+        private void OnOpenSettingsPerformed(CallbackContext context)
+        {
+            if (context.phase.Equals(InputActionPhase.Performed))
+                OpenSettingsPressed.Invoke();
+        }
+
+        private void OnCancelPerformed(CallbackContext context)
+        {
+            if(context.phase.Equals(InputActionPhase.Performed))
+                CanceledPressed.Invoke();
+        }
+
+        private void OnSubmitPerformed(CallbackContext context)
+        {
+            if(context.phase.Equals(InputActionPhase.Performed))
+                SubmitPressed.Invoke();
         }
 
         private void OnHorizontalAxisPerformed(CallbackContext context)
@@ -69,6 +90,13 @@ namespace Codebase.Infrastructure
         public event Action AttackPressed = delegate { };
     }
 
+    public partial class InputService : IUIInput 
+    { 
+        public event Action OpenSettingsPressed = delegate { };
+        public event Action CanceledPressed = delegate { };
+        public event Action SubmitPressed = delegate { };
+    }
+
     public partial class InputService : IDisposable
     {
         public void Dispose()
@@ -78,6 +106,9 @@ namespace Codebase.Infrastructure
             _inputs.Gameplay.Run.performed -= OnRunPerformed;
             _inputs.Gameplay.Run.canceled -= OnRunCanceled;
             _inputs.Gameplay.Jump.performed -= OnJumpPerformed;
+            _inputs.UI.OpenSettings.performed -= OnOpenSettingsPerformed;
+            _inputs.UI.Cancel.performed -= OnCancelPerformed;
+            _inputs.UI.Submit.performed -= OnSubmitPerformed;
         }
     }
 }

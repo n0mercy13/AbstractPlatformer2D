@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using Codebase.Logic;
 using Codebase.StaticData;
+using UnityEngine.Audio;
 
 namespace Codebase.Infrastructure
 {
     public partial class AudioService
     {
         private readonly IAudioPlayer _player;
+        private readonly AudioMixer _mixer;
         private readonly Dictionary<AudioElementTypes, AudioElement> _audioClips;
 
         public AudioService(SceneData data, AudioConfig config)
         {
             _player = data.AudioPlayer;
+            _mixer = config.AudioMixer;
             _audioClips = new Dictionary<AudioElementTypes, AudioElement>();
 
             foreach(AudioElement audio in config.AudioElements)
@@ -40,6 +43,29 @@ namespace Codebase.Infrastructure
             else
                 throw new ArgumentOutOfRangeException(
                     $"SFX type: {audioType} was not found");
+        }
+
+        public void SetVolume(UIElementTypes sliderType, float volume)
+        {
+            PlaySFX(AudioElementTypes.SFX_UI_ElementPressed);
+
+            switch (sliderType)
+            {
+                case UIElementTypes.UI_Slider_Volume_Master:
+                    _mixer.SetFloat(Constants.Audio.Parameters.MasterVolume, volume);
+                    break;
+
+                case UIElementTypes.UI_Slider_Volume_SFX:
+                    _mixer.SetFloat(Constants.Audio.Parameters.SFXVolume, volume);
+                    break;
+
+                case UIElementTypes.UI_Slider_Volume_Music:
+                    _mixer.SetFloat(Constants.Audio.Parameters.MusicVolume, volume);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"UI type: {sliderType} cannot be handled!");
+            }
         }
     }
 }

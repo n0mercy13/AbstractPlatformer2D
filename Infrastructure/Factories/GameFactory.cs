@@ -2,6 +2,7 @@
 using Codebase.Logic.EnemyComponents;
 using Codebase.Logic.PlayerComponents;
 using Codebase.StaticData;
+using Codebase.UI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -18,13 +19,16 @@ namespace Codebase.Infrastructure
         private readonly Enemy _enemyPrefab;
         private readonly Coin _coinPrefab;
         private readonly MedicalKit _medicalKitPrefab;
+        private readonly RectTransform _uiRoot;
+        private readonly UI_Window[] _uiPrefabs;
 
         public GameFactory(
             IObjectResolver container,
             SceneData sceneData,
             PlayerConfig playerConfig,
             EnemyConfig enemyConfig,
-            PickUpsConfig pickUpConfig)
+            PickUpsConfig pickUpConfig,
+            UIConfig uiConfig)
         {
             _container = container;
             _sceneData = sceneData;
@@ -32,6 +36,8 @@ namespace Codebase.Infrastructure
             _enemyPrefab = enemyConfig.Prefab;
             _coinPrefab = pickUpConfig.CoinPrefab;
             _medicalKitPrefab = pickUpConfig.MedicalKitPrefab;
+            _uiRoot = sceneData.UIRoot;
+            _uiPrefabs = uiConfig.UIPrefabs;
 
             _random = new System.Random(_seed);
         }
@@ -82,6 +88,21 @@ namespace Codebase.Infrastructure
         {
             foreach (PickUpMarker marker in _sceneData.MedicalKitMarkers)
                 CreatePickUp(marker, _medicalKitPrefab);
+        }
+
+        public UI_Window[] CreateUI()
+        {
+            UI_Window uiWindow = null;
+            UI_Window[] createdUI = new UI_Window[_uiPrefabs.Length];
+
+            for(int i = 0; i < _uiPrefabs.Length; i++)
+            {
+                uiWindow = _container.Instantiate(_uiPrefabs[i], _uiRoot);
+                uiWindow.Close();
+                createdUI[i] = uiWindow;
+            }
+
+            return createdUI;
         }
     }
 }
