@@ -9,7 +9,7 @@
         SFX_Player_PickUpItem = 12,
         SFX_Enemy_Attack = 30,
         SFX_Enemy_Hit = 31,
-        SFX_Enemy_PatrolPointReached = 40,
+        SFX_Enemy_Patrol = 40,
         SFX_Enemy_PlayerDetected = 41,
         SFX_Enemy_PlayerLost = 42,
         SFX_UI_ElementSelected = 100,

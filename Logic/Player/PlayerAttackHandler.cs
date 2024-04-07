@@ -12,6 +12,7 @@ namespace Codebase.Logic.PlayerComponents
 
         private readonly int _simultaneousHits = 10;
         private IGameplayInput _input;
+        private IAudioService _audioService;
         private YieldInstruction _attackDelay;
         private Coroutine _attackRechargeCoroutine;
         private Collider[] _hits;
@@ -20,9 +21,10 @@ namespace Codebase.Logic.PlayerComponents
         private bool _canAttack;
 
         [Inject]
-        private void Construct(IGameplayInput input, PlayerConfig config)
+        private void Construct(IGameplayInput input, IAudioService audioService, PlayerConfig config)
         {
             _input = input;
+            _audioService = audioService;
             _attackDelay = new WaitForSeconds(config.AttackSpeed);
             _hits = new Collider[_simultaneousHits];
             _attackRadius = config.AttackRadius;
@@ -43,11 +45,15 @@ namespace Codebase.Logic.PlayerComponents
         private void OnAttackPressed()
         {
             if(_canAttack == false)
+            {
+                _audioService.PlaySFX(AudioElementTypes.SFX_Player_AttackNotReady);
                 return;
+            }
 
             _canAttack = false;
             ApplyDamage();
             _attackRechargeCoroutine = StartCoroutine(AttackRechargeAsync());
+            _audioService.PlaySFX(AudioElementTypes.SFX_Player_Attack);
         }
 
         private void ApplyDamage()

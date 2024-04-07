@@ -1,12 +1,15 @@
-﻿using Cinemachine;
-using System;
+﻿using System;
+using Cinemachine;
 using UnityEngine;
+using Codebase.Infrastructure;
 
 namespace Codebase.StaticData
 {
     public class SceneData : MonoBehaviour
 	{
-        [field: SerializeField, Header("Camera")] public CinemachineVirtualCamera VirtualCamera {  get; private set; }
+        [field: SerializeField, Header("Video")] public CinemachineVirtualCamera VirtualCamera {  get; private set; }
+        [SerializeField, Header("Audio")] private AudioPlayer _audioPlayer;
+        public IAudioPlayer AudioPlayer => _audioPlayer as IAudioPlayer;
 		[field: SerializeField, Header("Markers")] public PlayerMarker PlayerMarker { get; private set; }
 		[field: SerializeField] public EnemyMarker[] EnemyMarkers { get; private set; }
 		[field: SerializeField] public PickUpMarker[] CoinMarkers { get; private set; }
@@ -18,6 +21,9 @@ namespace Codebase.StaticData
         {
             if(VirtualCamera == null)
                 throw new ArgumentNullException(nameof(VirtualCamera));
+
+            if(_audioPlayer == null || (_audioPlayer is IAudioPlayer _) == false)
+                throw new InvalidOperationException(nameof(AudioPlayer));
 
             if(PlayerMarker == null) 
                 throw new ArgumentNullException(nameof(PlayerMarker));

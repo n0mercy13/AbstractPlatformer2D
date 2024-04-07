@@ -1,4 +1,5 @@
-﻿using Codebase.StaticData;
+﻿using Codebase.Infrastructure;
+using Codebase.StaticData;
 using System.Collections;
 using UnityEngine;
 using VContainer;
@@ -10,6 +11,7 @@ namespace Codebase.Logic.EnemyComponents
         [SerializeField] private LayerMask _layerMask;
 
         private readonly int _simultaneousHits = 5;
+        private IAudioService _audioService;
         private Coroutine _attackRechargeCoroutine;
         private Coroutine _attackCoroutine;
         private YieldInstruction _attackDelay;
@@ -19,8 +21,9 @@ namespace Codebase.Logic.EnemyComponents
         private bool _canAttack;
 
         [Inject]
-        private void Construct(EnemyConfig config)
+        private void Construct( IAudioService audioService, EnemyConfig config)
         {
+            _audioService = audioService;
             _attackRadius = config.AttackRadius;
             _damage = config.Damage;
             _attackDelay = new WaitForSeconds(config.AttackSpeed);
@@ -61,6 +64,7 @@ namespace Codebase.Logic.EnemyComponents
                     }
                 }
 
+                _audioService.PlaySFX(AudioElementTypes.SFX_Enemy_Attack);
                 _canAttack = false;
                 _attackRechargeCoroutine = StartCoroutine(AttackRecharge());
             }

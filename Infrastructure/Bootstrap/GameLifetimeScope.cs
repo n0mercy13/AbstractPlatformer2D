@@ -46,6 +46,9 @@ namespace Codebase.Infrastructure
                 .Register<InputService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
             builder
+                .Register<AudioService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+            builder
                 .Register<GameFactory>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
@@ -75,6 +78,8 @@ namespace Codebase.Infrastructure
                 .RegisterInstance(_gameConfig.EnemyConfig);
             builder
                 .RegisterInstance(_gameConfig.PickUpsConfig);
+            builder
+                .RegisterInstance(_gameConfig.AudioConfig);
             builder
                 .RegisterInstance(_sceneData);
         }

@@ -1,5 +1,7 @@
+using Codebase.Infrastructure;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace Codebase.Logic.PlayerComponents
 {
@@ -7,6 +9,14 @@ namespace Codebase.Logic.PlayerComponents
     public class PickUpsHandler : MonoBehaviour
     {
         [SerializeField, Range(0f, 10f)] private float _collectionRadius;
+        
+        private IAudioService _audioService;
+
+        [Inject]
+        private void Construct(IAudioService audioService)
+        {
+            _audioService = audioService;
+        }
 
         private void Awake()
         {
@@ -34,12 +44,14 @@ namespace Codebase.Logic.PlayerComponents
         {
             int value = coin.Collect();
             CoinCollected.Invoke(value);
+            _audioService.PlaySFX(AudioElementTypes.SFX_Player_PickUpItem);
         }
 
         private void CollectMedicalKit(MedicalKit medicalKit)
         {
             int value = medicalKit.Collect();
             MedicalKitCollected.Invoke(value);
+            _audioService.PlaySFX(AudioElementTypes.SFX_Player_PickUpItem);
         }
     }
 }
