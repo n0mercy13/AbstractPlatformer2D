@@ -25,7 +25,7 @@ namespace Codebase.Infrastructure
         {
             RegisterStaticData(builder);
             RegisterPrefabs(builder);
-            RegisterEntryPoint(builder);
+            RegisterEntryPoints(builder);
             RegisterServices(builder);
             RegisterManagers(builder);
             RegisterComponents(builder);
@@ -61,7 +61,7 @@ namespace Codebase.Infrastructure
                 .AsImplementedInterfaces();
         }
 
-        private void RegisterEntryPoint(IContainerBuilder builder)
+        private void RegisterEntryPoints(IContainerBuilder builder)
         {
             builder
                 .RegisterEntryPoint<Bootstrap>(Lifetime.Singleton)

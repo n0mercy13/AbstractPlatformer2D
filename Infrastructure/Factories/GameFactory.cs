@@ -1,11 +1,12 @@
-﻿using Codebase.Logic;
+﻿using System;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
+using Codebase.Logic;
 using Codebase.Logic.EnemyComponents;
 using Codebase.Logic.PlayerComponents;
 using Codebase.StaticData;
 using Codebase.UI;
-using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 
 namespace Codebase.Infrastructure
 {
@@ -21,6 +22,7 @@ namespace Codebase.Infrastructure
         private readonly MedicalKit _medicalKitPrefab;
         private readonly RectTransform _uiRoot;
         private readonly UI_Window[] _uiPrefabs;
+        private readonly UI_HealthBar _healthBarPrefab;
 
         public GameFactory(
             IObjectResolver container,
@@ -38,6 +40,7 @@ namespace Codebase.Infrastructure
             _medicalKitPrefab = pickUpConfig.MedicalKitPrefab;
             _uiRoot = sceneData.UIRoot;
             _uiPrefabs = uiConfig.UIPrefabs;
+            _healthBarPrefab = uiConfig.HealthBarPrefab;
 
             _random = new System.Random(_seed);
         }
@@ -53,9 +56,22 @@ namespace Codebase.Infrastructure
             _container.Instantiate<T>(
                 prefab, marker.transform.position, Quaternion.identity, _sceneData.PickUpParent);
         }
+        private bool CanCreate(float chance) => chance >= _random.NextDouble();
 
-        private bool CanCreate(float chance) =>
-            chance >= _random.NextDouble();
+        private UI_HealthBar CreateHealthBar() => _container.Instantiate(_healthBarPrefab, _uiRoot);
+
+        private void InitializeHealthBarHandler(HealthBarHandler healthBarHandler)
+        {
+            if (healthBarHandler == null)
+            {
+                throw new InvalidOperationException($"{nameof(Player)} not have {nameof(HealthBarHandler)} component!");
+            }
+            else
+            {
+                UI_HealthBar healthBar = CreateHealthBar();
+                healthBarHandler.Initialize(healthBar);
+            }
+        }
     }
 
     public partial class GameFactory : IGameFactory
@@ -65,7 +81,11 @@ namespace Codebase.Infrastructure
             Player player = _container.Instantiate(
                _playerPrefab, _sceneData.PlayerMarker.transform.position, Quaternion.identity);
             _sceneData.VirtualCamera.Follow = player.transform;
+
+            HealthBarHandler healthBarHandler = player.GetComponentInChildren<HealthBarHandler>();
+            InitializeHealthBarHandler(healthBarHandler);
         }
+
 
         public void CreateEnemies()
         {

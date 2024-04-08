@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+using VContainer.Unity;
 
 namespace Codebase.Logic
 {
