@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Codebase.UI;
 
 namespace Codebase.Logic
 {
@@ -8,7 +9,7 @@ namespace Codebase.Logic
     {
         [SerializeField] private Transform _healthBarLocation;
 
-        private UI_HealthBar _healthBar;
+        private HealthBarView _healthBar;
         private Coroutine _setHealthBarLocation;
 
         private void OnValidate()
@@ -26,6 +27,12 @@ namespace Codebase.Logic
         {
             if (_setHealthBarLocation != null)
                 StopCoroutine(_setHealthBarLocation);
+
+        }
+
+        private void OnDestroy()
+        {
+            Destroy(_healthBar.gameObject);
         }
 
         private IEnumerator UpdateHealthBarLocationAsync()
@@ -38,13 +45,13 @@ namespace Codebase.Logic
             }
         }
 
-        public void UpdateView(int health, int maxHealth) =>
-            _healthBar.UpdateView(health, maxHealth);
+        public void Refresh(int health, int maxHealth) =>
+            _healthBar.Refresh(health, maxHealth);
     }
 
-    public partial class HealthBarHandler : IInitializable<UI_HealthBar>
+    public partial class HealthBarHandler : IInitializable<HealthBarView>
     {
-        public void Initialize(UI_HealthBar healthBar)
+        public void Initialize(HealthBarView healthBar)
         {
             _healthBar = healthBar;
         }

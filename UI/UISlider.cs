@@ -5,7 +5,7 @@ using Codebase.Logic;
 
 namespace Codebase.UI
 {
-    public class UI_Slider : UI_Element
+    public class UISlider : UIElement
     {
         [SerializeField] private Slider _slider;
 

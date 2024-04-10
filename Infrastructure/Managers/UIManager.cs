@@ -9,16 +9,16 @@ namespace Codebase.Infrastructure
     {
         private readonly IUIInput _uiInput;
         private readonly IGameFactory _gameFactory;
-        private readonly Stack<UI_Window> _activeWindows;
+        private readonly Stack<WindowView> _activeWindows;
 
-        private Dictionary<UIWindowTypes, UI_Window> _uiWindows;
+        private Dictionary<UIWindowTypes, WindowView> _uiWindows;
 
         public UIManager(IUIInput uiInput, IGameFactory gameFactory)
         {
             _uiInput = uiInput;
             _gameFactory = gameFactory;
-            _activeWindows = new Stack<UI_Window>();
-            _uiWindows = new Dictionary<UIWindowTypes, UI_Window>();
+            _activeWindows = new Stack<WindowView>();
+            _uiWindows = new Dictionary<UIWindowTypes, WindowView>();
 
             _uiInput.CanceledPressed += OnCanceledPressed;
             _uiInput.OpenSettingsPressed += OnOpenSettingsPressed;
@@ -26,7 +26,7 @@ namespace Codebase.Infrastructure
 
         private void Open(UIWindowTypes type)
         {
-            if (_uiWindows.TryGetValue(type, out UI_Window ui))
+            if (_uiWindows.TryGetValue(type, out WindowView ui))
             {
                 ui.Open();
                 _activeWindows.Push(ui);
@@ -39,7 +39,7 @@ namespace Codebase.Infrastructure
 
         private void Close(UIWindowTypes type)
         {
-            if (_uiWindows.TryGetValue(type, out UI_Window ui))
+            if (_uiWindows.TryGetValue(type, out WindowView ui))
                 ui.Close();
             else
                 throw new ArgumentOutOfRangeException($"UI type: {type} was not found");
@@ -50,7 +50,7 @@ namespace Codebase.Infrastructure
             if (_activeWindows.Count < 1)
                 return;
 
-            UI_Window ui = _activeWindows.Pop();
+            WindowView ui = _activeWindows.Pop();
             ui.Close();
         }
 
@@ -64,9 +64,9 @@ namespace Codebase.Infrastructure
     {
         public void Initialize()
         {
-            UI_Window[] uiWindows = _gameFactory.CreateUI();
+            WindowView[] uiWindows = _gameFactory.CreateUI();
 
-            foreach (UI_Window ui in uiWindows)
+            foreach (WindowView ui in uiWindows)
                 _uiWindows.Add(ui.Type, ui);
         }
     }

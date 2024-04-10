@@ -3,7 +3,7 @@ using Codebase.Logic;
 
 namespace Codebase.UI
 {
-    public class UI_Element : MonoBehaviour
+    public class UIElement : MonoBehaviour
     {
         [field: SerializeField] public UIElementTypes Type { get; private set; }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Codebase.UI
 {
-    public class UI_Window : MonoBehaviour
+    public class WindowView : MonoBehaviour
     {
         [field: SerializeField] public UIWindowTypes Type { get; private set; }
         [SerializeField] private CanvasGroup _canvasGroup;

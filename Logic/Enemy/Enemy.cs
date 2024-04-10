@@ -8,6 +8,7 @@ namespace Codebase.Logic.EnemyComponents
     public partial class Enemy : MonoBehaviour
     {
         [SerializeField] private EnemyAI _ai;
+        [SerializeField] private HealthBarHandler _healthBarHandler;
         
         private IHealth _health;
 
@@ -17,7 +18,7 @@ namespace Codebase.Logic.EnemyComponents
             _health = health;
             _health.Initialize(config.MaxHealth);
 
-            _health.HealthChanged += OnHealthChanged;
+            _health.Changed += OnHealthChanged;
             _health.Death += OnDeath;
         }
 
@@ -27,17 +28,20 @@ namespace Codebase.Logic.EnemyComponents
                 throw new ArgumentNullException(nameof(_ai));
         }
 
+        private void Start()
+        {
+            _health.ApplyDamage(0);
+        }
+
         private void OnDisable()
         {
-            _health.HealthChanged -= OnHealthChanged;
+            _health.Changed -= OnHealthChanged;
             _health.Death -= OnDeath;
         }
 
         private void OnHealthChanged(int health, int maxHealth)
         {
-#if UNITY_EDITOR
-            Debug.Log($"Enemy({gameObject.name}) health: {health} / {maxHealth}");
-#endif
+            _healthBarHandler.Refresh(health, maxHealth);
         }
 
         private void OnDeath()

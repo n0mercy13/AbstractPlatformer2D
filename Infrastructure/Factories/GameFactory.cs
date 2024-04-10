@@ -21,8 +21,8 @@ namespace Codebase.Infrastructure
         private readonly Coin _coinPrefab;
         private readonly MedicalKit _medicalKitPrefab;
         private readonly RectTransform _uiRoot;
-        private readonly UI_Window[] _uiPrefabs;
-        private readonly UI_HealthBar _healthBarPrefab;
+        private readonly WindowView[] _uiPrefabs;
+        private readonly HealthBarView _healthBarPrefab;
 
         public GameFactory(
             IObjectResolver container,
@@ -58,17 +58,19 @@ namespace Codebase.Infrastructure
         }
         private bool CanCreate(float chance) => chance >= _random.NextDouble();
 
-        private UI_HealthBar CreateHealthBar() => _container.Instantiate(_healthBarPrefab, _uiRoot);
+        private HealthBarView CreateHealthBar() => _container.Instantiate(_healthBarPrefab, _uiRoot);
 
-        private void InitializeHealthBarHandler(HealthBarHandler healthBarHandler)
+        private void InitializeHealthBarHandler(Transform actor)
         {
+            HealthBarHandler healthBarHandler = actor.GetComponentInChildren<HealthBarHandler>();
+
             if (healthBarHandler == null)
             {
-                throw new InvalidOperationException($"{nameof(Player)} not have {nameof(HealthBarHandler)} component!");
+                throw new InvalidOperationException($"{actor.name} not have {nameof(HealthBarHandler)} component!");
             }
             else
             {
-                UI_HealthBar healthBar = CreateHealthBar();
+                HealthBarView healthBar = CreateHealthBar();
                 healthBarHandler.Initialize(healthBar);
             }
         }
@@ -82,8 +84,7 @@ namespace Codebase.Infrastructure
                _playerPrefab, _sceneData.PlayerMarker.transform.position, Quaternion.identity);
             _sceneData.VirtualCamera.Follow = player.transform;
 
-            HealthBarHandler healthBarHandler = player.GetComponentInChildren<HealthBarHandler>();
-            InitializeHealthBarHandler(healthBarHandler);
+            InitializeHealthBarHandler(player.transform);
         }
 
 
@@ -95,6 +96,8 @@ namespace Codebase.Infrastructure
             {
                 enemy = CreateEnemy(marker.transform.position);
                 enemy.Initialize(marker.PatrolRoute);
+
+                InitializeHealthBarHandler(enemy.transform);
             }
         }
 
@@ -110,10 +113,10 @@ namespace Codebase.Infrastructure
                 CreatePickUp(marker, _medicalKitPrefab);
         }
 
-        public UI_Window[] CreateUI()
+        public WindowView[] CreateUI()
         {
-            UI_Window uiWindow = null;
-            UI_Window[] createdUI = new UI_Window[_uiPrefabs.Length];
+            WindowView uiWindow = null;
+            WindowView[] createdUI = new WindowView[_uiPrefabs.Length];
 
             for(int i = 0; i < _uiPrefabs.Length; i++)
             {

@@ -18,7 +18,7 @@ namespace Codebase.Logic.PlayerComponents
         {
             _health = health;
             _health.Initialize(config.MaxHealth);
-            _health.HealthChanged += OnHealthChanged;
+            _health.Changed += OnHealthChanged;
             _health.Death += OnDeath;
         }
 
@@ -44,13 +44,13 @@ namespace Codebase.Logic.PlayerComponents
 
         private void OnDisable()
         {
-            _health.HealthChanged -= OnHealthChanged;
+            _health.Changed -= OnHealthChanged;
             _health.Death -= OnDeath;
             _pickUpsHandler.CoinCollected -= OnCoinCollected;
         }
 
         private void OnHealthChanged(int health, int maxHealth) => 
-            _healthBarHandler.UpdateView(health, maxHealth);
+            _healthBarHandler.Refresh(health, maxHealth);
 
         private void OnDeath()
         {

@@ -7,7 +7,7 @@ using Codebase.Logic;
 
 namespace Codebase.UI
 {
-    public class UI_Settings_Sound : UI_Window
+    public class SoundSettingsView : WindowView
     {
         [SerializeField] private Slider _masterSlider;
         [SerializeField] private Slider _sfxSlider;

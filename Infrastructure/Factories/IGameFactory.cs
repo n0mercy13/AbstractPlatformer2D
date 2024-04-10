@@ -8,6 +8,6 @@ namespace Codebase.Infrastructure
         void CreateEnemies();
         void CreateCoins();
         void CreateMedicalKits();
-        UI_Window[] CreateUI();
+        WindowView[] CreateUI();
     }
 }

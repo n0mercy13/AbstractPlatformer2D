@@ -8,7 +8,7 @@ namespace Codebase.StaticData
     [Serializable]
     public class UIConfig
     {
-        [field: SerializeField] public UI_Window[] UIPrefabs { get; private set; }
-        [field: SerializeField] public UI_HealthBar HealthBarPrefab { get; private set; }
+        [field: SerializeField] public WindowView[] UIPrefabs { get; private set; }
+        [field: SerializeField] public HealthBarView HealthBarPrefab { get; private set; }
     }
 }
