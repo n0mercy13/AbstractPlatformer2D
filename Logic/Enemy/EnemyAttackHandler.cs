@@ -10,7 +10,7 @@ namespace Codebase.Logic.EnemyComponents
     {
         [SerializeField] private LayerMask _layerMask;
 
-        private readonly int _simultaneousHits = 5;
+        private readonly int _capacity = 12;
         private IAudioService _audioService;
         private Coroutine _attackRechargeCoroutine;
         private Coroutine _attackCoroutine;
@@ -27,7 +27,7 @@ namespace Codebase.Logic.EnemyComponents
             _attackRadius = config.AttackRadius;
             _damage = config.Damage;
             _attackDelay = new WaitForSeconds(config.AttackSpeed);
-            _hits = new Collider[_simultaneousHits];
+            _hits = new Collider[_capacity];
         }
 
         private void OnDisable()

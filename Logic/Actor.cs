@@ -15,7 +15,7 @@ namespace Codebase.Logic
                 throw new ArgumentNullException(nameof(_healthBarMarker));
         }
 
-        private void OnEnable()
+        private void Awake()
         {
             _health.Changed += OnHealthChanged;
             _health.Depleted += OnHealthDepleted;
