@@ -4,16 +4,13 @@ using UnityEngine.Assertions;
 
 namespace Codebase.Logic
 {
-    public partial class Health
+    public class Health : IHealth
     {
         private int _value;
         private int _maxValue;
-    }
 
-    public partial class Health : IHealth
-    {
-        public event Action<int, int> Changed = delegate { };
-        public event Action Death = delegate { };
+        public event Action<int, int> Changed;
+        public event Action Depleted;
         
         public void Initialize(int maxHealth)
         {
@@ -21,25 +18,25 @@ namespace Codebase.Logic
             _value = _maxValue;
         }
 
-        public void ApplyDamage(int amount)
+        public void Decrease(int amount)
         {
             Assert.IsTrue(amount >= 0);
 
             _value -= amount;
             _value = Mathf.Max(_value, 0);
-            Changed.Invoke(_value, _maxValue);
+            Changed?.Invoke(_value, _maxValue);
 
             if (_value == 0)
-                Death.Invoke();
+                Depleted?.Invoke();
         }
 
-        public void Heal(int amount)
+        public void Increase(int amount)
         {
             Assert.IsTrue(amount >= 0);
 
             _value += amount;
             _value = Mathf.Min(_value, _maxValue);
-            Changed.Invoke(_value, _maxValue);
+            Changed?.Invoke(_value, _maxValue);
         }
     }
 }

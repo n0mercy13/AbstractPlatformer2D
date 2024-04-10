@@ -66,6 +66,9 @@ namespace Codebase.Infrastructure
             builder
                 .RegisterEntryPoint<Bootstrap>(Lifetime.Singleton)
                 .AsSelf();
+            builder
+                .RegisterEntryPoint<HealthViewManager>(Lifetime.Singleton)
+                .AsSelf();
         }
 
         private void RegisterPrefabs(IContainerBuilder builder)

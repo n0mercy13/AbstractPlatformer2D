@@ -5,10 +5,10 @@ namespace Codebase.Logic
     public interface IHealth
     {
         event Action<int, int> Changed;
-        event Action Death;
+        event Action Depleted;
 
         void Initialize(int maxHealth);
-        void ApplyDamage(int amount);
-        void Heal(int amount);
+        void Decrease(int amount);
+        void Increase(int amount);
     }
 }

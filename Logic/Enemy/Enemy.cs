@@ -5,48 +5,20 @@ using Codebase.StaticData;
 
 namespace Codebase.Logic.EnemyComponents
 {
-    public partial class Enemy : MonoBehaviour
+    public partial class Enemy : Actor
     {
         [SerializeField] private EnemyAI _ai;
-        [SerializeField] private HealthBarHandler _healthBarHandler;
-        
-        private IHealth _health;
 
         [Inject]
-        private void Construct(IHealth health, EnemyConfig config)
+        private void Construct(EnemyConfig config)
         {
-            _health = health;
-            _health.Initialize(config.MaxHealth);
-
-            _health.Changed += OnHealthChanged;
-            _health.Death += OnDeath;
+            Health.Initialize(config.MaxHealth);
         }
 
         private void OnValidate()
         {
             if(_ai == null)
                 throw new ArgumentNullException(nameof(_ai));
-        }
-
-        private void Start()
-        {
-            _health.ApplyDamage(0);
-        }
-
-        private void OnDisable()
-        {
-            _health.Changed -= OnHealthChanged;
-            _health.Death -= OnDeath;
-        }
-
-        private void OnHealthChanged(int health, int maxHealth)
-        {
-            _healthBarHandler.Refresh(health, maxHealth);
-        }
-
-        private void OnDeath()
-        {
-            Destroy(gameObject);
         }
     }
 
@@ -56,10 +28,5 @@ namespace Codebase.Logic.EnemyComponents
         {
             _ai.SetPatrolRoute(patrolRoute);
         }
-    }
-
-    public partial class Enemy : IDamageable
-    {
-        public void ApplyDamage(int amount) => _health.ApplyDamage(amount);
     }
 }

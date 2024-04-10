@@ -1,3 +1,4 @@
+using Codebase.Logic;
 using System;
 using System.Collections;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Codebase.UI
 {
-    public class HealthBarView : MonoBehaviour
+    public partial class HealthBarView : MonoBehaviour
     {
         [SerializeField] private Image _topBar;
         [SerializeField] private Image _bottomBar;
@@ -14,6 +15,7 @@ namespace Codebase.UI
         [SerializeField, Range(0.0f, 10.0f)] private float _updateSpeedOnAttacked = 5.0f;
         [SerializeField, Range(0.0f, 20.0f)] private float _updateSpeedOnHealed = 10.0f;
 
+        private Actor _actor;
         private Coroutine _updateHealthCoroutine;
         private float _currentHealth;
         private int _targetHealth;
@@ -35,9 +37,13 @@ namespace Codebase.UI
         {
             if (_updateHealthCoroutine != null)
                 StopCoroutine(_updateHealthCoroutine);
+
+            _actor.HealthChanged -= Refresh;
         }
 
-        public void Refresh(int targetHealth, int maxHealth)
+        public void Close() => Destroy(gameObject);
+
+        private void Refresh(int targetHealth, int maxHealth)
         {
             if (_currentHealth == 0)
                 _currentHealth = maxHealth;
@@ -85,5 +91,14 @@ namespace Codebase.UI
 
         private void UpdateBar(Image bar, float value) =>
             bar.fillAmount = value / _maxHealth;
+    }
+
+    public partial class HealthBarView : IInitializable<Actor>
+    {
+        public void Initialize(Actor actor)
+        {
+            _actor = actor;
+            _actor.HealthChanged += Refresh;
+        }
     }
 }

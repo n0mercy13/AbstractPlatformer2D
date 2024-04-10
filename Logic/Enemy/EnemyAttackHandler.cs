@@ -21,7 +21,7 @@ namespace Codebase.Logic.EnemyComponents
         private bool _canAttack;
 
         [Inject]
-        private void Construct( IAudioService audioService, EnemyConfig config)
+        private void Construct(IAudioService audioService, EnemyConfig config)
         {
             _audioService = audioService;
             _attackRadius = config.AttackRadius;

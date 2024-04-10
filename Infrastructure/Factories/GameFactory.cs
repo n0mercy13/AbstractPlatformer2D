@@ -45,9 +45,6 @@ namespace Codebase.Infrastructure
             _random = new System.Random(_seed);
         }
 
-        private Enemy CreateEnemy(Vector3 position) =>
-            _container.Instantiate(_enemyPrefab, position, Quaternion.identity, _sceneData.EnemyParent);
-
         private void CreatePickUp<T>(PickUpMarker marker, T prefab) where T : PickUp
         {
             if (CanCreate(marker.SpawnChance) == false)
@@ -56,50 +53,23 @@ namespace Codebase.Infrastructure
             _container.Instantiate<T>(
                 prefab, marker.transform.position, Quaternion.identity, _sceneData.PickUpParent);
         }
+
         private bool CanCreate(float chance) => chance >= _random.NextDouble();
-
-        private HealthBarView CreateHealthBar() => _container.Instantiate(_healthBarPrefab, _uiRoot);
-
-        private void InitializeHealthBarHandler(Transform actor)
-        {
-            HealthBarHandler healthBarHandler = actor.GetComponentInChildren<HealthBarHandler>();
-
-            if (healthBarHandler == null)
-            {
-                throw new InvalidOperationException($"{actor.name} not have {nameof(HealthBarHandler)} component!");
-            }
-            else
-            {
-                HealthBarView healthBar = CreateHealthBar();
-                healthBarHandler.Initialize(healthBar);
-            }
-        }
     }
 
     public partial class GameFactory : IGameFactory
     {
-        public void CreatePlayer()
+        public Player CreatePlayer()
         {
             Player player = _container.Instantiate(
                _playerPrefab, _sceneData.PlayerMarker.transform.position, Quaternion.identity);
             _sceneData.VirtualCamera.Follow = player.transform;
 
-            InitializeHealthBarHandler(player.transform);
+            return player;
         }
 
-
-        public void CreateEnemies()
-        {
-            Enemy enemy = null;
-
-            foreach (EnemyMarker marker in _sceneData.EnemyMarkers)
-            {
-                enemy = CreateEnemy(marker.transform.position);
-                enemy.Initialize(marker.PatrolRoute);
-
-                InitializeHealthBarHandler(enemy.transform);
-            }
-        }
+        public Enemy CreateEnemy(Vector3 position) =>
+            _container.Instantiate(_enemyPrefab, position, Quaternion.identity, _sceneData.EnemyParent);
 
         public void CreateCoins()
         {
@@ -127,5 +97,8 @@ namespace Codebase.Infrastructure
 
             return createdUI;
         }
+
+        public HealthBarView CreateHealthBar() => 
+            _container.Instantiate(_healthBarPrefab, _uiRoot);
     }
 }
