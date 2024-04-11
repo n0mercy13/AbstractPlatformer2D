@@ -11,6 +11,8 @@ namespace Codebase.StaticData
         [field: SerializeField] public PickUpsConfig PickUpsConfig { get; private set; }
         [field: SerializeField] public AudioConfig AudioConfig { get; private set; }
         [field: SerializeField] public UIConfig UIConfig { get; private set; }
+        [field: SerializeField] public RaycastConfig RaycastConfig { get; private set; }
+
 
         private void OnValidate()
         {
@@ -28,6 +30,9 @@ namespace Codebase.StaticData
 
             if (UIConfig == null)
                 throw new ArgumentNullException(nameof(UIConfig));
+           
+            if (RaycastConfig == null)
+                throw new ArgumentNullException(nameof(RaycastConfig));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Codebase.Logic
 {
-    public interface IDamageable
+    public interface IDamageable : ITarget
     {
         void ApplyDamage(int amount);
     }

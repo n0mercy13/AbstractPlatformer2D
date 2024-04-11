@@ -64,6 +64,15 @@ namespace Codebase.Infrastructure
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UseAbility"",
+                    ""type"": ""Button"",
+                    ""id"": ""c2e7c1be-48a9-4793-8e51-b63b7cb6a703"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -141,6 +150,17 @@ namespace Codebase.Infrastructure
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
                     ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ffd5aac5-5f54-4c13-a3d5-df39965cf63a"",
+                    ""path"": ""<Keyboard>/#(F)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""UseAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -235,6 +255,7 @@ namespace Codebase.Infrastructure
             m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
             m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
             m_Gameplay_Attack = m_Gameplay.FindAction("Attack", throwIfNotFound: true);
+            m_Gameplay_UseAbility = m_Gameplay.FindAction("UseAbility", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_OpenSettings = m_UI.FindAction("OpenSettings", throwIfNotFound: true);
@@ -305,6 +326,7 @@ namespace Codebase.Infrastructure
         private readonly InputAction m_Gameplay_Run;
         private readonly InputAction m_Gameplay_Jump;
         private readonly InputAction m_Gameplay_Attack;
+        private readonly InputAction m_Gameplay_UseAbility;
         public struct GameplayActions
         {
             private @InputActions m_Wrapper;
@@ -313,6 +335,7 @@ namespace Codebase.Infrastructure
             public InputAction @Run => m_Wrapper.m_Gameplay_Run;
             public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
             public InputAction @Attack => m_Wrapper.m_Gameplay_Attack;
+            public InputAction @UseAbility => m_Wrapper.m_Gameplay_UseAbility;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -334,6 +357,9 @@ namespace Codebase.Infrastructure
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @UseAbility.started += instance.OnUseAbility;
+                @UseAbility.performed += instance.OnUseAbility;
+                @UseAbility.canceled += instance.OnUseAbility;
             }
 
             private void UnregisterCallbacks(IGameplayActions instance)
@@ -350,6 +376,9 @@ namespace Codebase.Infrastructure
                 @Attack.started -= instance.OnAttack;
                 @Attack.performed -= instance.OnAttack;
                 @Attack.canceled -= instance.OnAttack;
+                @UseAbility.started -= instance.OnUseAbility;
+                @UseAbility.performed -= instance.OnUseAbility;
+                @UseAbility.canceled -= instance.OnUseAbility;
             }
 
             public void RemoveCallbacks(IGameplayActions instance)
@@ -444,6 +473,7 @@ namespace Codebase.Infrastructure
             void OnRun(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnAttack(InputAction.CallbackContext context);
+            void OnUseAbility(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

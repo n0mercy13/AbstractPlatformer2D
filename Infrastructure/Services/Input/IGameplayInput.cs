@@ -8,5 +8,6 @@ namespace Codebase.Infrastructure
         event Action<bool> IsRunPressed;
         event Action JumpPressed;
         event Action AttackPressed;
+        event Action UseAbilityPressed;
     }
 }

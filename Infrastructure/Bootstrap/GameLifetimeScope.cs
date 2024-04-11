@@ -4,6 +4,7 @@ using VContainer;
 using VContainer.Unity;
 using Codebase.StaticData;
 using Codebase.Logic;
+using Codebase.Infrastructure.Services;
 
 namespace Codebase.Infrastructure
 {
@@ -57,6 +58,9 @@ namespace Codebase.Infrastructure
                 .Register<AudioService>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
             builder
+                .Register<RaycastService>(Lifetime.Singleton)
+                .AsImplementedInterfaces();
+            builder
                 .Register<GameFactory>(Lifetime.Singleton)
                 .AsImplementedInterfaces();
         }
@@ -93,6 +97,8 @@ namespace Codebase.Infrastructure
                 .RegisterInstance(_gameConfig.AudioConfig);
             builder
                 .RegisterInstance(_gameConfig.UIConfig);
+            builder
+                .RegisterInstance(_gameConfig.RaycastConfig);
             builder
                 .RegisterInstance(_sceneData);
         }

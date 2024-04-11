@@ -19,6 +19,7 @@ namespace Codebase.Infrastructure
             _inputs.Gameplay.Run.canceled += OnRunCanceled;
             _inputs.Gameplay.Jump.performed += OnJumpPerformed;
             _inputs.Gameplay.Attack.performed += OnAttackPerformed;
+            _inputs.Gameplay.UseAbility.performed += OnUseAbilityPerformed;
             _inputs.UI.OpenSettings.performed += OnOpenSettingsPerformed;
             _inputs.UI.Cancel.performed += OnCancelPerformed;
             _inputs.UI.Submit.performed += OnSubmitPerformed;
@@ -80,6 +81,12 @@ namespace Codebase.Infrastructure
             if(context.phase.Equals(InputActionPhase.Performed))
                 AttackPressed.Invoke();
         }
+
+        private void OnUseAbilityPerformed(CallbackContext context)
+        {
+            if(context.phase.Equals(InputActionPhase.Performed))
+                UseAbilityPressed.Invoke();
+        }
     }
 
     public partial class InputService : IGameplayInput
@@ -88,6 +95,7 @@ namespace Codebase.Infrastructure
         public event Action<bool> IsRunPressed = delegate { };
         public event Action JumpPressed = delegate { };
         public event Action AttackPressed = delegate { };
+        public event Action UseAbilityPressed;
     }
 
     public partial class InputService : IUIInput 
@@ -106,6 +114,8 @@ namespace Codebase.Infrastructure
             _inputs.Gameplay.Run.performed -= OnRunPerformed;
             _inputs.Gameplay.Run.canceled -= OnRunCanceled;
             _inputs.Gameplay.Jump.performed -= OnJumpPerformed;
+            _inputs.Gameplay.Attack.performed -= OnAttackPerformed;
+            _inputs.Gameplay.UseAbility.performed -= OnUseAbilityPerformed;
             _inputs.UI.OpenSettings.performed -= OnOpenSettingsPerformed;
             _inputs.UI.Cancel.performed -= OnCancelPerformed;
             _inputs.UI.Submit.performed -= OnSubmitPerformed;
