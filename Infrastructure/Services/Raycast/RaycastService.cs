@@ -42,6 +42,9 @@ namespace Codebase.Infrastructure.Services
                     if (_results[i].TryGetComponent(out ITarget target))
                         targets.Add(target);
 
+                if(targets.Count <= 0)
+                    return false;
+
                 return true;
             }
         }

@@ -7,6 +7,7 @@ namespace Codebase.StaticData
 {
     public class SceneData : MonoBehaviour
 	{
+        [field: SerializeField, Header("Infrastructure")] public CoroutineRunner CoroutineRunner { get; private set; }
         [field: SerializeField, Header("Video")] public CinemachineVirtualCamera VirtualCamera {  get; private set; }
         [field: SerializeField, Header("UI")] public RectTransform UIRoot {  get; private set; }
         [SerializeField, Header("Audio")] private AudioPlayer _audioPlayer;
@@ -20,6 +21,9 @@ namespace Codebase.StaticData
 
         private void OnValidate()
         {
+            if(CoroutineRunner == null)
+                throw new ArgumentNullException(nameof(CoroutineRunner));
+
             if (VirtualCamera == null)
                 throw new ArgumentNullException(nameof(VirtualCamera)); 
             

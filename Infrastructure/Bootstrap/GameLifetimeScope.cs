@@ -37,6 +37,9 @@ namespace Codebase.Infrastructure
             builder
                 .Register<UIManager>(Lifetime.Singleton)
                 .AsSelf();
+            builder
+                .Register<PlayerAbilityManager>(Lifetime.Singleton)
+                .AsSelf();
         }
 
         private static void RegisterComponents(IContainerBuilder builder)
@@ -44,6 +47,9 @@ namespace Codebase.Infrastructure
             builder
                 .Register<Health>(Lifetime.Transient)
                 .AsImplementedInterfaces();
+            builder
+                .Register<Vampirisms>(Lifetime.Transient)
+                .AsSelf();
         }
 
         private void RegisterServices(IContainerBuilder builder)

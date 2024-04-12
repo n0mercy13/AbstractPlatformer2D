@@ -12,30 +12,39 @@ namespace Codebase.Infrastructure
         private readonly IAudioService _audioService;
         private readonly UIManager _uiManager;
         private readonly HealthViewManager _healthViewManager;
+        private readonly PlayerAbilityManager _playerAbilityManager;
         private readonly SceneData _sceneData;
+        private Player _player;
 
         public Bootstrap(
-            IGameFactory gameFactory, 
-            IAudioService audioService, 
-            UIManager uiManager, 
-            HealthViewManager healthViewManager, 
+            IGameFactory gameFactory,
+            IAudioService audioService,
+            UIManager uiManager,
+            HealthViewManager healthViewManager,
+            PlayerAbilityManager playerAbilityManager,
             SceneData enemyConfig)
         {
             _gameFactory = gameFactory;
             _audioService = audioService;
             _uiManager = uiManager;
             _healthViewManager = healthViewManager;
+            _playerAbilityManager = playerAbilityManager;
             _sceneData = enemyConfig;
         }
 
         public void Start()
         {
-            InitializeManagers();
             InstantiateWorld();
+            InitializeManagers();
             PlayBackgroundMusic();
         }
 
-        private void InitializeManagers() => _uiManager.Initialize();
+        private void InitializeManagers()
+        {
+            _uiManager.Initialize();
+            _playerAbilityManager.Initialize(_player);
+            _healthViewManager.Register(_player);
+        }
 
         private void PlayBackgroundMusic() => _audioService.PlayMusic();
 
@@ -61,8 +70,7 @@ namespace Codebase.Infrastructure
 
         private void CreatePlayer()
         {
-            Player player = _gameFactory.CreatePlayer();
-            _healthViewManager.Register(player);
+            _player = _gameFactory.CreatePlayer();
         }
     }
 }

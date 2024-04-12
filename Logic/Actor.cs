@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using VContainer;
 
 namespace Codebase.Logic
 {
@@ -29,7 +28,7 @@ namespace Codebase.Logic
 
         public event Action<int, int> HealthChanged;
         public event Action<Actor> Death;
-
+        
         public Vector3 HealthBarPosition => _healthBarMarker.position;
         protected IHealth Health => _health;
 
@@ -46,5 +45,10 @@ namespace Codebase.Logic
     public partial class Actor : IDamageable
     {
         public void ApplyDamage(int amount) => _health.Decrease(amount);
+    }
+
+    public partial class Actor : IHealable
+    {
+        public void HealSelf(int amount) => _health.Increase(amount);
     }
 }
